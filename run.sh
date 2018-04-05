@@ -6,13 +6,13 @@ GIT_COMMIT_URL="$GIT_BRANCH_URL/commits/$WERCKER_GIT_COMMIT"
 WERCKER_STEP_TEMP="/tmp/$WERCKER_STEP_ID"
 mkdir -p $WERCKER_STEP_TEMP
 
-if [ -n "$WERCKER_SLACK_BRANCH" ]; then
-    if [ "$WERCKER_SLACK_BRANCH" != "$WERCKER_GIT_BRANCH" ]; then
+if [ -n "$WERCKER_SLACK_NOTIFY_BRANCH" ]; then
+    if [ "$WERCKER_SLACK_NOTIFY_BRANCH" != "$WERCKER_GIT_BRANCH" ]; then
         return 0
     fi
 fi
 
-if [ -z "$WERCKER_SLACK_URL" ]; then
+if [ -z "$WERCKER_SLACK_NOTIFY_URL" ]; then
   fail "URL is Required Property"
 fi
 
@@ -66,7 +66,7 @@ json="{
     ]
 }"
 
-RESULT=$(curl -d "payload=$json" -s "$WERCKER_SLACK_URL" --output "$WERCKER_STEP_TEMP"/result.txt -w "%{http_code}")
+RESULT=$(curl -d "payload=$json" -s "$WERCKER_SLACK_NOTIFY_URL" --output "$WERCKER_STEP_TEMP"/result.txt -w "%{http_code}")
 cat "$WERCKER_STEP_TEMP/result.txt"
 
 if [ "$RESULT" = "500" ] || [ "$RESULT" = "404" ] ; then
