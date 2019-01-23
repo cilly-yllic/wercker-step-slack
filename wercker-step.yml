@@ -1,5 +1,5 @@
 name: slack-notify
-version: 1.0.2
+version: 2.0.0
 summary: Wercker Slack Notification
 tags:
   - slack
@@ -9,6 +9,9 @@ properties:
   url:
     type: string
     required: true
+  channel:
+    type: string
+    required: false
   branch:
     type: string
     required: false
