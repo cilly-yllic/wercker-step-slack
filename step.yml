@@ -1,5 +1,5 @@
 name: slack-notify
-version: 3.0.4
+version: 3.1.0
 summary: Wercker Slack Notification
 tags:
   - slack

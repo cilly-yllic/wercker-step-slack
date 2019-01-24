@@ -73,12 +73,11 @@ FIELDS="
   }
 "
 
-FIELDS_PATTERN="{\"title\":\"[^\"]*\",\"value\":\"[^\"]*\"}"
+FIELDS_PATTERN="\{\"title\":\"[^\"]*\",\"value\":\"[^\"]*\"\}"
 
 if [ -n "$WERCKER_SLACK_NOTIFY_HEAD_FIELDS" ]; then
   TRIMMED=`echo ${WERCKER_SLACK_NOTIFY_HEAD_FIELDS} | tr -d ' ' | tr -d '\r' | tr -d '\n'`
-#  if [[ ! ${TRIMMED} =~ ^$FIELDS_PATTERN(,$FIELDS_PATTERN)*$ ]]; then
-  if [[ ! ${TRIMMED} =~ '^{\"title\":\"[^\"]*\",\"value\":\"[^\"]*\"}(,{\"title\":\"[^\"]*\",\"value\":\"[^\"]*\"})*$' ]]; then
+  if [[ ! ${TRIMMED} =~ ^$FIELDS_PATTERN(,$FIELDS_PATTERN)*$ ]]; then
     echo "trimmed: $TRIMMED"
     fail "head fields $WERCKER_SLACK_NOTIFY_HEAD_FIELDS is invalid pattern"
   fi
@@ -87,8 +86,7 @@ fi
 
 if [ -n "$WERCKER_SLACK_NOTIFY_TAIL_FIELDS" ]; then
   TRIMMED=`echo ${WERCKER_SLACK_NOTIFY_TAIL_FIELDS} | tr -d ' ' | tr -d '\r' | tr -d '\n'`
-#  if [[ ! ${TRIMMED} =~ ^$FIELDS_PATTERN(,$FIELDS_PATTERN)*$ ]]; then
-  if [[ ! ${TRIMMED} =~ '^{\"title\":\"[^\"]*\",\"value\":\"[^\"]*\"}(,{\"title\":\"[^\"]*\",\"value\":\"[^\"]*\"})*$' ]]; then
+  if [[ ! ${TRIMMED} =~ ^$FIELDS_PATTERN(,$FIELDS_PATTERN)*$ ]]; then
     echo "trimmed: $TRIMMED"
     fail "tail fields $WERCKER_SLACK_NOTIFY_TAIL_FIELDS is invalid pattern"
   fi
