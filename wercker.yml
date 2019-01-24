@@ -14,4 +14,5 @@ publish:
         packages: ca-certificates
 
     - internal/publish-step:
-        owner: wercker
+#        owner: wercker
+        private: true
