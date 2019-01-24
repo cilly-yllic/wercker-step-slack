@@ -10,9 +10,15 @@ WERCKER_STEP_TEMP="/tmp/$WERCKER_STEP_ID"
 mkdir -p $WERCKER_STEP_TEMP
 
 if [ -n "$WERCKER_SLACK_NOTIFY_BRANCH" ]; then
-    if [ "$WERCKER_SLACK_NOTIFY_BRANCH" != "$WERCKER_GIT_BRANCH" ]; then
-        return 0
-    fi
+  if [ "$WERCKER_SLACK_NOTIFY_BRANCH" != "$WERCKER_GIT_BRANCH" ]; then
+    return 0
+  fi
+fi
+
+if [ -n "$WERCKER_SLACK_NOTIFY_RESULT_TRIGGER" ]; then
+  if [ "$WERCKER_SLACK_NOTIFY_RESULT_TRIGGER" != "$WERCKER_RESULT" ]; then
+    return 0
+  fi
 fi
 
 if [ -z "$WERCKER_SLACK_NOTIFY_URL" ]; then

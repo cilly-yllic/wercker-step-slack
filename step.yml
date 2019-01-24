@@ -1,5 +1,5 @@
 name: slack-notify
-version: 3.1.0
+version: 3.2.0
 summary: Wercker Slack Notification
 tags:
   - slack
@@ -22,5 +22,8 @@ properties:
     type: string
     required: false
   - name: tail_fields
+    type: string
+    required: false
+  - name: result_trigger
     type: string
     required: false

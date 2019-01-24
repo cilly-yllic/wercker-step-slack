@@ -8,6 +8,7 @@
 - `branch` (optional) If set, it will only notify on the given branch
 - `head_fields` (optional) If set, add attachment field
 - `tail_fields` (optional) If set, add attachment field
+- `result_trigger` (optional) If set ( passed or failed ), notify on trigger
 
 ## Example
 
