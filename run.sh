@@ -73,7 +73,7 @@ FIELDS="
   }
 "
 
-FIELDS_PATTERN="{\"title\":\"[^\"]+\",\"value\":\"[^\"]+\"}"
+FIELDS_PATTERN="{\"title\":\"[^\"]*\",\"value\":\"[^\"]*\"}"
 
 if [ -n "$WERCKER_SLACK_NOTIFY_HEAD_FIELDS" ]; then
   TRIMMED=`echo ${WERCKER_SLACK_NOTIFY_HEAD_FIELDS} | tr -d ' ' | tr -d '\r' | tr -d '\n'`
