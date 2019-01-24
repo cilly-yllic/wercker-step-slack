@@ -75,7 +75,7 @@ FIELDS="
 
 FIELDS_PATTERN="{\"title\":\"[^\"]+\",\"value\":\"[^\"]+\"}"
 
-if [ -n $WERCKER_SLACK_NOTIFY_HEAD_FIELDS ]; then
+if [ -n "$WERCKER_SLACK_NOTIFY_HEAD_FIELDS" ]; then
   TRIMMED=`echo ${WERCKER_SLACK_NOTIFY_HEAD_FIELDS} | tr -d ' ' | tr -d '\r' | tr -d '\n'`
   if [[ ! ${TRIMMED} =~ ^$FIELDS_PATTERN(,$FIELDS_PATTERN)*$ ]]; then
     echo "trimmed: $TRIMMED"
@@ -84,7 +84,7 @@ if [ -n $WERCKER_SLACK_NOTIFY_HEAD_FIELDS ]; then
   FIELDS="$WERCKER_SLACK_NOTIFY_HEAD_FIELDS,$FIELDS"
 fi
 
-if [ -n $WERCKER_SLACK_NOTIFY_TAIL_FIELDS ]; then
+if [ -n "$WERCKER_SLACK_NOTIFY_TAIL_FIELDS" ]; then
   TRIMMED=`echo ${WERCKER_SLACK_NOTIFY_TAIL_FIELDS} | tr -d ' ' | tr -d '\r' | tr -d '\n'`
   if [[ ! ${TRIMMED} =~ ^$FIELDS_PATTERN(,$FIELDS_PATTERN)*$ ]]; then
     echo "trimmed: $TRIMMED"
