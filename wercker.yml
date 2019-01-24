@@ -14,5 +14,5 @@ publish:
         packages: ca-certificates
 
     - internal/publish-step:
-#        owner: wercker
-        private: true
+        owner: cilly
+#        private: true
