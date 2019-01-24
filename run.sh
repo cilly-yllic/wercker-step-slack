@@ -32,11 +32,6 @@ if [ -z "$WERCKER_STARTED_BY" ]; then
   USER=""
 fi
 
-ACTION_LINK="<$ACTION_URL|$ACTION>"
-APPLICATION_LINK="<$WERCKER_RUN_URL|$WERCKER_APPLICATION_NAME>"
-GIT_BRANCH_LINK="<$GIT_BRANCH_URL|$WERCKER_GIT_BRANCH>"
-GIT_COMMIT_LINK="<$GIT_COMMIT_URL|$WERCKER_GIT_COMMIT>"
-
 FALLBACK="
 $ACTION for $WERCKER_APPLICATION_NAME　$USER
 result: $WERCKER_RESULT
@@ -44,43 +39,66 @@ branch: $WERCKER_GIT_BRANCH
 commit: $WERCKER_GIT_COMMIT
 "
 
+CI="
+action: <$ACTION_URL|$ACTION>
+application: <$WERCKER_RUN_URL|$WERCKER_APPLICATION_NAME>
+"
+
+REPOSITORY="
+branch: <$GIT_BRANCH_URL|$WERCKER_GIT_BRANCH>
+commit: <$GIT_COMMIT_URL|$WERCKER_GIT_COMMIT>
+"
+
 COLOR="good"
 
 RESULT=$WERCKER_RESULT
 if [ "$WERCKER_RESULT" = "failed" ]; then
-  RESULT="$RESULT \n step: $WERCKER_FAILED_STEP_DISPLAY_NAME"
+  RESULT="$RESULT \n step: \`$WERCKER_FAILED_STEP_DISPLAY_NAME\`"
   FALLBACK="$FALLBACK \n step: $WERCKER_FAILED_STEP_DISPLAY_NAME"
   COLOR="danger"
 fi
 
+FIELDS="
+  {
+    \"title\": \"CI\",
+    \"value\": \"$CI\"
+  },
+  {
+    \"title\": \"Result\",
+    \"value\": \"$RESULT\"
+  },
+  {
+    \"title\": \"Repository\",
+    \"value\": \"$REPOSITORY\"
+  }
+"
+
+FIELDS_PATTERN="{\"title\":\"[^\"]+\",\"value\":\"[^\"]+\"}"
+
+if [ -n $WERCKER_SLACK_NOTIFY_HEAD_FIELDS ]; then
+  TRIMMED=`echo ${WERCKER_SLACK_NOTIFY_HEAD_FIELDS} | tr -d ' ' | tr -d '\r' | tr -d '\n'`
+  if [[ ! ${TRIMMED} =~ ^$FIELDS_PATTERN(,$FIELDS_PATTERN)*$ ]]; then
+    fail "head fields is invalid pattern"
+  fi
+  FIELDS="$WERCKER_SLACK_NOTIFY_HEAD_FIELDS,$FIELDS"
+fi
+
+if [ -n $WERCKER_SLACK_NOTIFY_TAIL_FIELDS ]; then
+  TRIMMED=`echo ${WERCKER_SLACK_NOTIFY_TAIL_FIELDS} | tr -d ' ' | tr -d '\r' | tr -d '\n'`
+  if [[ ! ${TRIMMED} =~ ^$FIELDS_PATTERN(,$FIELDS_PATTERN)*$ ]]; then
+    fail "tail fields is invalid pattern"
+  fi
+  FIELDS="$FIELDS,$WERCKER_SLACK_NOTIFY_TAIL_FIELDS"
+fi
+
 json="{
     \"channel\": \"$WERCKER_SLACK_NOTIFY_CHANNEL\",
+    \"icon_url\":\"$WERCKER_SLACK_NOTIFY_ICON_URL\",
     \"attachments\":[
       {
         \"fallback\": \"$FALLBACK\",
         \"author_name\": \"$WERCKER_STARTED_BY\",
-        \"fields\": [
-          {
-            \"title\": \"Type\",
-            \"value\": \"$ACTION_LINK\",
-          },
-          {
-            \"title\": \"Application\",
-            \"value\": \"$APPLICATION_LINK\",
-          },
-          {
-            \"title\": \"Result\",
-            \"value\": \"$RESULT\",
-          },
-          {
-            \"title\": \"Branch\",
-            \"value\": \"$GIT_BRANCH_LINK\",
-          },
-          {
-            \"title\": \"Commit\",
-            \"value\": \"$GIT_COMMIT_LINK\",
-          }
-        ],
+        \"fields\": [ $FIELDS ],
         \"color\": \"$COLOR\",
         \"footer\": \"$FOOTER\",
         \"ts\": \"$DATE\"

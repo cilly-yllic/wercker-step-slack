@@ -1,0 +1,26 @@
+name: slack-notify
+version: 3.0.0
+summary: Wercker Slack Notification
+tags:
+  - slack
+  - webhook
+  - notification
+properties:
+  - name: url
+    type: string
+    required: true
+  - name: channel
+    type: string
+    required: false
+  - name: icon_url
+    type: string
+    required: false
+  - name: branch
+    type: string
+    required: false
+  - name: head_fields
+    type: string
+    required: false
+  - name: tail_fields
+    type: string
+    required: false
